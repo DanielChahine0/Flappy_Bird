@@ -5,8 +5,7 @@
 import pygame
 import random
 import sys
-import os
-from os.path import isfile, join
+
 
 pygame.init()
 """
@@ -111,7 +110,7 @@ def move_pipes(pipes):
             pipes.remove(pipe)
         if pipe[0] == BIRD_X:
             SCORE += 1
-            pygame.mixer.Sound.play(SCORE_SOUND).set_volume(0.4)
+            pygame.mixer.Sound.play(SCORE_SOUND)
 
             pygame.mixer.music.stop()
 
@@ -122,7 +121,7 @@ def check_collision(pipes):
     gap_start_x = pipes[0][0]
     gap_end_x = gap_start_x + PIPE_WIDTH
     if gap_start_x < BIRD_X+BIRD_WIDTH and gap_end_x > BIRD_X:
-        if not(gap_end_y-5 < BIRD_Y and BIRD_Y+BIRD_HEIGHT < gap_start_y+5):
+        if not(gap_end_y-15 < BIRD_Y and BIRD_Y+BIRD_HEIGHT < gap_start_y+15):
             pygame.mixer.Sound.play(HIT_SOUND)
             pygame.mixer.music.stop()
             return True
@@ -135,7 +134,7 @@ def check_collision(pipes):
 # Method for displaying the lost message
 def lost():
     # Set the loosing text message
-    lost_text = FONT.render("You Lost!", True, "white")
+    lost_text = FONT.render("YOU LOST!", True, "white")
 
     # Set the position & dimensions
     x = WIDTH / 2 - lost_text.get_width() / 2-BLACK_MARGIN
@@ -151,19 +150,6 @@ def lost():
     WINDOW.blit(lost_text, (WIDTH / 2 - lost_text.get_width() / 2, HEIGHT / 2 - lost_text.get_height() / 2))
     pygame.display.update()
     pygame.time.delay(1000)
-
-
-# Changes of the theme
-def theme(number):
-    global BACKGROUND, BIRD_IMAGE, PIPE_DOWNWARD, PIPE_UPWARD
-    bird_path = join("Sources", "BIRD", f"bird_{number}.png")
-    pipe_path = join("Sources", "Pipe", f"pipe_{number}.png")
-    bg_path = join("Sources", "BG", f"background_{number}.png")
-
-    BACKGROUND = pygame.transform.scale(pygame.image.load(bg_path), (900, HEIGHT))
-    BIRD_IMAGE = pygame.transform.scale(pygame.image.load(bird_path), (BIRD_WIDTH, BIRD_HEIGHT))
-    PIPE_UPWARD = pygame.transform.scale(pygame.image.load(pipe_path), (PIPE_WIDTH, PIPE_HEIGHT))
-    PIPE_DOWNWARD = pygame.transform.flip(PIPE_UPWARD, True, True)
 
 
 # Checks if the current score is higher than the high score
@@ -202,11 +188,9 @@ def main():
             if event.type == pygame.QUIT:
                 sys.exit()
             if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
-                pygame.mixer.Sound.play(JUMP_SOUND).set_volume(0.2)
+                pygame.mixer.Sound.play(JUMP_SOUND)
                 pygame.mixer.music.stop()
-                pygame.mixer.Sound.play(BG_MUSIC)
                 starting = True
-                theme("2")
 
         if starting:
 
@@ -219,12 +203,8 @@ def main():
                     if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
                         BIRD_VELOCITY = JUMP_SPEED
                         BIRD_Y += BIRD_VELOCITY
-                        pygame.mixer.Sound.play(JUMP_SOUND).set_volume(0.2)
+                        pygame.mixer.Sound.play(JUMP_SOUND)
                         pygame.mixer.music.stop()
-                    if event.type == pygame.KEYDOWN and event.key == pygame.K_1:
-                        theme(1)
-                    if event.type == pygame.KEYDOWN and event.key == pygame.K_2:
-                        theme(2)
 
                 # Make sure the bird is between the boundaries
                 if BIRD_Y+BIRD_HEIGHT < HEIGHT-GROUND_HEIGHT:
