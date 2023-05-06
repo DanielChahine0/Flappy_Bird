@@ -2,6 +2,7 @@
     - pygame is to load the game and its mechanics
     - random is necessary when generating random gapes between the pipes
     - sys is to fully close the window when the game is closed"""
+
 import pygame
 import random
 import sys
